@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-color: black;
+        grid-template-rows: auto 1fr;
+        grid-template-columns: 1fr;
+      }
+      body > p {
+        display: grid;
+        grid-template-rows: 1fr auto 1fr;
+        grid-template-columns: 1fr auto 1fr;
+      }
+      body > p > span {
+        font-family: sans-serif;
+        font-size: .75em;
+        grid-column: 2;
+        grid-row: 2;
+        color: #cdf;
+      }
+      body > div, 
+      body > div > iframe {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "@arrow-js/core": "https://cdn.jsdelivr.net/npm/@arrow-js/core@1.0.0-alpha.9/dist/index.mjs"
+        }
+      }
+    </script>
+    <script type="module">
+      import { reactive, html } from '@arrow-js/core'
+
+      const data = reactive({
+        href: "/",
+      });
+      const appElement = document.getElementById('app');
+
+      const template = html`<span>${() => data.href}</span>`
+
+      template(appElement)
+
+      window.addEventListener(
+        "message",
+        (event) => {
+          const { href } = event.data;
+          if (href) {
+            data.href = href;
+          }
+        },
+        false,
+      );
+    </script>
+    <p id="app"></p>
+    <div> <iframe src="minerva-story"></iframe> </div>
+  </body>
+</html>
